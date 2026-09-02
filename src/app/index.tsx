@@ -1,98 +1,131 @@
-import * as Device from 'expo-device';
-import { Platform, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-
-import { AnimatedIcon } from '@/components/animated-icon';
-import { HintRow } from '@/components/hint-row';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { WebBadge } from '@/components/web-badge';
-import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
-
-function getDevMenuHint() {
-  if (Platform.OS === 'web') {
-    return <ThemedText type="small">use browser devtools</ThemedText>;
-  }
-  if (Device.isDevice) {
-    return (
-      <ThemedText type="small">
-        shake device or press <ThemedText type="code">m</ThemedText> in terminal
-      </ThemedText>
-    );
-  }
-  const shortcut = Platform.OS === 'android' ? 'cmd+m (or ctrl+m)' : 'cmd+d';
-  return (
-    <ThemedText type="small">
-      press <ThemedText type="code">{shortcut}</ThemedText>
-    </ThemedText>
-  );
-}
+import { StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView } from "react-native-safe-area-context";
+import { Link } from 'expo-router';
+import Feather from '@expo/vector-icons/Feather';
+import Foundation from '@expo/vector-icons/Foundation';
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 export default function HomeScreen() {
   return (
-    <ThemedView style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
-        <ThemedView style={styles.heroSection}>
-          <AnimatedIcon />
-          <ThemedText type="title" style={styles.title}>
-            Welcome to&nbsp;Expo
-          </ThemedText>
-        </ThemedView>
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.tab}>
+        <Text style={styles.title}>Smart Home</Text>
+      </View>
+      <View style={styles.dashboard}>
+        <View style={styles.dashboardHeader}>
+          <Text style={styles.dashboardHeaderText}>Smart Home</Text>
+          <Link href="/settings" asChild><Feather name="settings" size={40} color="#2e71dd" /></Link>
+          
+        </View>
+        <View style={styles.dashboardMainContainer}>
+          <Ionicons name="thermometer-outline" size={60} color="#2e71dd" />
+          <Text style={{fontSize: 50}}>26°C</Text>
+          <Text>Living Room</Text>
+        </View>
+        <View style={styles.dashboardRow}>
+          <View style={styles.dashboardBox}>
+            <Foundation name="lightbulb" size={43} color="#2e71dd" />
+            <Text style={styles.boxText}>Light</Text>
+            <Text style={styles.boxSubText}>ON</Text>
+          </View>
+          <View style={styles.dashboardBox}>
+            <FontAwesome5 name="snowflake" size={40} color="#2e71dd" />
+            <Text style={styles.boxText}>AC</Text>
+            <Text style={styles.boxSubText}>24°C</Text>
+          </View>
+        </View>
+        <View style={styles.dashboardRow}>
+          <View style={styles.dashboardBox}>
+            <FontAwesome5 name="lock" size={40} color="#2e71dd" />
+            <Text style={styles.boxText}>Door</Text>
+            <Text style={styles.boxSubText}>LOCKED</Text>
+          </View>
+          <View style={styles.dashboardBox}>
+            <FontAwesome5 name="camera" size={40} color="#2e71dd" />
+            <Text style={styles.boxText}>Camera</Text>
+            <Text style={styles.boxSubText}>ON</Text>
+          </View>
+        </View>
+        <View style={styles.viewDevices}>
+          <Link href="/devices"><Text style={{fontSize: 15, fontWeight: 'bold'}}>View All Devices ➔</Text></Link>
+        </View>
+      </View>
+      
+    </SafeAreaView>
 
-        <ThemedText type="code" style={styles.code}>
-          get started
-        </ThemedText>
-
-        <ThemedView type="backgroundElement" style={styles.stepContainer}>
-          <HintRow
-            title="Try editing"
-            hint={<ThemedText type="code">src/app/index.tsx</ThemedText>}
-          />
-          <HintRow title="Dev tools" hint={getDevMenuHint()} />
-          <HintRow
-            title="Fresh start"
-            hint={<ThemedText type="code">npm run reset-project</ThemedText>}
-          />
-        </ThemedView>
-
-        {Platform.OS === 'web' && <WebBadge />}
-      </SafeAreaView>
-    </ThemedView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    flexDirection: 'row',
-  },
   safeArea: {
     flex: 1,
-    paddingHorizontal: Spacing.four,
-    alignItems: 'center',
-    gap: Spacing.three,
-    paddingBottom: BottomTabInset + Spacing.three,
-    maxWidth: MaxContentWidth,
+    backgroundColor: '#000000'
   },
-  heroSection: {
-    alignItems: 'center',
+  tab: {
+    height: 65,
+    backgroundColor: '#FFFFFF',
+    alignItems: 'flex-start',
     justifyContent: 'center',
+    
+  },
+  dashboard: {
     flex: 1,
-    paddingHorizontal: Spacing.four,
-    gap: Spacing.four,
+    backgroundColor: '#f5f4f4'
   },
   title: {
-    textAlign: 'center',
+    color: '#080808',
+    fontWeight: 'bold',
+    fontSize: 20,
+    marginLeft: 20
   },
-  code: {
-    textTransform: 'uppercase',
+  dashboardHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: 30,
+    paddingLeft: 20,
+    paddingRight: 20,
   },
-  stepContainer: {
-    gap: Spacing.three,
-    alignSelf: 'stretch',
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.four,
-    borderRadius: Spacing.four,
+  dashboardHeaderText: {
+    fontSize: 30
   },
+  dashboardMainContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderRadius: 12,
+    borderColor: '#000000',
+    margin: 20
+  },
+  dashboardRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+    gap: 15
+  },
+  dashboardBox: {
+    minHeight: 130,
+    minWidth: 170,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderRadius: 12,
+    borderColor: '#000000',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  viewDevices: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 20,
+  },
+  boxText: {
+    fontWeight: 'bold',
+    padding: 5,
+    fontSize: 15
+  },
+  boxSubText: {
+
+  }
 });
